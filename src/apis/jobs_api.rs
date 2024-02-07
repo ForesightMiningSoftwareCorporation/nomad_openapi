@@ -809,7 +809,7 @@ pub async fn get_job_versions(configuration: &configuration::Configuration, job_
 }
 
 #[allow(clippy::too_many_arguments)]
-pub async fn get_jobs(configuration: &configuration::Configuration, region: Option<&str>, namespace: Option<&str>, index: Option<i32>, wait: Option<&str>, stale: Option<&str>, prefix: Option<&str>, x_nomad_token: Option<&str>, per_page: Option<i32>, next_token: Option<&str>) -> Result<Vec<crate::models::JobListStub>, Error<GetJobsError>> {
+pub async fn get_jobs(configuration: &configuration::Configuration, region: Option<&str>, namespace: Option<&str>, prefix: Option<&str>, next_token: Option<&str>, per_page: Option<&str>, filter: Option<&str>, meta: Option<bool>, x_nomad_token: Option<&str>) -> Result<Vec<crate::models::JobListStub>, Error<GetJobsError>> {
 
     let local_var_client = &configuration.client;
 
@@ -822,11 +822,11 @@ pub async fn get_jobs(configuration: &configuration::Configuration, region: Opti
     if let Some(ref local_var_str) = namespace {
         local_var_req_builder = local_var_req_builder.query(&[("namespace", &local_var_str.to_string())]);
     }
-    if let Some(ref local_var_str) = wait {
-        local_var_req_builder = local_var_req_builder.query(&[("wait", &local_var_str.to_string())]);
+    if let Some(ref local_var_str) = filter {
+        local_var_req_builder = local_var_req_builder.query(&[("filter", &local_var_str.to_string())]);
     }
-    if let Some(ref local_var_str) = stale {
-        local_var_req_builder = local_var_req_builder.query(&[("stale", &local_var_str.to_string())]);
+    if let Some(ref local_var_str) = meta {
+        local_var_req_builder = local_var_req_builder.query(&[("meta", &local_var_str.to_string())]);
     }
     if let Some(ref local_var_str) = prefix {
         local_var_req_builder = local_var_req_builder.query(&[("prefix", &local_var_str.to_string())]);
@@ -839,9 +839,6 @@ pub async fn get_jobs(configuration: &configuration::Configuration, region: Opti
     }
     if let Some(ref local_var_user_agent) = configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-    }
-    if let Some(local_var_param_value) = index {
-        local_var_req_builder = local_var_req_builder.header("index", local_var_param_value.to_string());
     }
     if let Some(local_var_param_value) = x_nomad_token {
         local_var_req_builder = local_var_req_builder.header("X-Nomad-Token", local_var_param_value.to_string());
@@ -868,6 +865,7 @@ pub async fn get_jobs(configuration: &configuration::Configuration, region: Opti
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
+
 }
 
 pub async fn post_job(configuration: &configuration::Configuration, job_name: &str, job_register_request: crate::models::JobRegisterRequest, region: Option<&str>, namespace: Option<&str>, x_nomad_token: Option<&str>, idempotency_token: Option<&str>) -> Result<crate::models::JobRegisterResponse, Error<PostJobError>> {

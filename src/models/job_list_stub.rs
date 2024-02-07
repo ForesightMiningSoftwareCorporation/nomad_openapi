@@ -14,6 +14,8 @@
 
 
 
+use std::collections::HashMap;
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, Default)]
 pub struct JobListStub {
     #[serde(rename = "CreateIndex", skip_serializing_if = "Option::is_none")]
@@ -48,6 +50,8 @@ pub struct JobListStub {
     pub stop: Option<bool>,
     #[serde(rename = "SubmitTime", skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<i64>,
+    #[serde(rename = "Meta", skip_serializing_if = "Option::is_none")]
+    pub meta: Option<HashMap<String, String>>,
     #[serde(rename = "Type", skip_serializing_if = "Option::is_none")]
     pub _type: Option<String>,
 }
@@ -71,6 +75,7 @@ impl JobListStub {
             status_description: None,
             stop: None,
             submit_time: None,
+            meta: None,
             _type: None,
         }
     }
